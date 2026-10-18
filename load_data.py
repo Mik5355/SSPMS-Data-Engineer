@@ -1,12 +1,12 @@
 import pandas as pd
 import os
 
-def load_plain_tables(raw_path='anonymiseddata/'):
+def load_plain_tables(raw_path='data/raw/'):
     """Load smaller OULAD CSV tables"""
     print("Loading plain tables...")
     
     if not os.path.exists(raw_path):
-        print(f"Warning: Path {raw_path} does not exist. Please check your data folder.")
+        print(f"Warning: Path {raw_path} does not exist.")
 
     courses = pd.read_csv(f'{raw_path}courses.csv')
     assessments = pd.read_csv(f'{raw_path}assessments.csv')
@@ -17,16 +17,27 @@ def load_plain_tables(raw_path='anonymiseddata/'):
     
     return courses, assessments, vle, student_info, student_reg, student_assess
 
-def load_student_vle_chunked(raw_path='./', chunk_size=1000000):
-    """
-    Load the large studentVle.csv in chunks.
-    Yields chunks to prevent memory overflow (OOM).
-    """
+def load_student_vle_chunked(raw_path='data/raw/', chunk_size=1000000):
+    """Load the large studentVle.csv in chunks"""
     print(f"Loading studentVle in chunks of {chunk_size}...")
     chunks = pd.read_csv(f'{raw_path}studentVle.csv', chunksize=chunk_size)
-    
     for chunk in chunks:
         yield chunk
+
+def merge_base_tables(student_info, student_reg, courses):
+
+    print("Merging studentInfo, studentRegistration, and courses...")
+
+    merged = pd.merge(student_info, student_reg, 
+                      on=['id_student', 'code_module', 'code_presentation'], 
+                      how='left')
+    
+    merged = pd.merge(merged, courses, 
+                      on=['code_module', 'code_presentation'], 
+                      how='left')
+    
+    print(f"Merged base table shape: {merged.shape}")
+    return merged
 
 if __name__ == "__main__":
     print("Testing data loaders...")
@@ -34,12 +45,15 @@ if __name__ == "__main__":
     try:
         courses, assessments, vle, student_info, student_reg, student_assess = load_plain_tables()
         print(f"Success! Loaded studentInfo: {student_info.shape}")
+
+        base_data = merge_base_tables(student_info, student_reg, courses)
+        
     except FileNotFoundError:
-        print("Error: Could not find the CSV files. Did you download OULAD and put it in the correct folder?")
-    
+        print("Error: Could not find the CSV files.")
+
     try:
         for chunk in load_student_vle_chunked():
             print(f"Success! First chunk of studentVle loaded. Shape: {chunk.shape}")
             break
     except FileNotFoundError:
-         print("Error: Could not find studentVle.csv in the specified folder.")
+         print("Error: Could not find studentVle.csv.")
