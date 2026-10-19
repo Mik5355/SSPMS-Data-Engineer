@@ -1,28 +1,23 @@
-# Raw data - never commit, files are too large for GitHub
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
-
-# Trained models
-models/*.pkl
-models/*.joblib
-
-# Local database
-*.db
-*.sqlite3
+# Environments
+venv/
+.venv/
+env/
 
 # Python
 __pycache__/
-*.py[cod]
-.venv/
-venv/
-env/
-
-# Jupyter
+*.pyc
+.pytest_cache/
 .ipynb_checkpoints/
 
-# OS / IDE
+# Secrets / OS
+.env
 .DS_Store
-.vscode/
-.idea/
+Thumbs.db
+
+# Data and models (large; documented in README how to obtain)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+models/*
+!models/.gitkeep
