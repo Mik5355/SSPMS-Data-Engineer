@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 
+MODULES = ['AAA', 'BBB', 'CCC']
+
 def load_plain_tables(raw_path='data/raw/'):
     """Load smaller OULAD CSV tables"""
     print("Loading plain tables...")
