@@ -1,28 +1,18 @@
-# Raw data - never commit, files are too large for GitHub
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
+# Core
+pandas>=2.2
+numpy>=1.26
 
-# Trained models
-models/*.pkl
-models/*.joblib
+# ML
+scikit-learn>=1.5
+joblib>=1.4
+shap>=0.46
 
-# Local database
-*.db
-*.sqlite3
+# App
+streamlit>=1.39
 
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-env/
+# Charts
+matplotlib>=3.9
 
-# Jupyter
-.ipynb_checkpoints/
-
-# OS / IDE
-.DS_Store
-.vscode/
-.idea/
+# Notebooks
+jupyter>=1.1
+ipykernel>=6.29
