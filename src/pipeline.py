@@ -19,6 +19,8 @@ def run_pipeline(base_df, weekly_activity_df):
     ]
     df = df.drop(columns=[c for c in cols_to_drop if c in df.columns])
 
+    weekly_activity_df = weekly_activity_df[weekly_activity_df['week'] <= 6]
+
     student_weekly = weekly_activity_df.groupby(['id_student', 'code_module', 'code_presentation']).agg(
         avg_weekly_clicks=('total_clicks', 'mean'),
         avg_active_days=('active_days', 'mean'),
